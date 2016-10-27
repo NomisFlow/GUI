@@ -5,17 +5,21 @@ import java.awt.event.*;
 public class GUI extends JFrame implements  ActionListener, MouseListener, KeyListener
 {
     WeatherStation ws;
+    
     JButton updateButton;
     JButton exitButton;
     JButton stadtSendenButton;
+    
     JLabel temperatureLabel;
     JLabel humidityLabel;
     JLabel stadtLabel;
     JLabel sonnenaufgang;
     JLabel sonnenuntergang;
+    
     JComboBox sun;
-
+    
     JTextField stadttf;
+    
     public static void main(String[] args){
         GUI g = new GUI();
     }
@@ -28,7 +32,8 @@ public class GUI extends JFrame implements  ActionListener, MouseListener, KeyLi
         setLayout(new FlowLayout());
         setVisible(true);
         setIconImage(getToolkit().getImage("wetter.jpg"));
-
+        
+        //Array für JComboBox
         String choice[] = {"Anzeige wählen", "Sonnenaufgang", "Sonnenuntergang"};
 
         temperatureLabel = new JLabel(ws.getTemperature() + " °C");
@@ -40,33 +45,38 @@ public class GUI extends JFrame implements  ActionListener, MouseListener, KeyLi
         stadttf = new JTextField("Stadt eingeben");
         sun = new JComboBox(choice);
 
+        //Hinzufügen der Bedienelemente
         add(updateButton);
         add(stadttf);
         add(exitButton);
-
         add(temperatureLabel);
         add(humidityLabel);
         add(stadtLabel);
         add(sun);
 
+        //Hinzufügen der Listener
         updateButton.addActionListener(this);
         exitButton.addActionListener(this);
         stadttf.addMouseListener(this);
         stadttf.addKeyListener(this);
         sun.addActionListener(this);
 
+        //Größe des JFrames einstellen 
         pack();
-        setSize(290, 200);
+        setSize(290, 170);
     }
 
     public void actionPerformed(ActionEvent e) {
+        //Updatebutton
         if(e.getSource() == updateButton){
             updaten();
         }
+        //Exitbutton
         else if(e.getSource() == exitButton){
             setVisible(false);
             dispose();
         }
+        //Kombobox zur Auswahl 
         else if(e.getSource() == sun){
             JComboBox selectedChoice = (JComboBox) e.getSource();
 
@@ -79,12 +89,10 @@ public class GUI extends JFrame implements  ActionListener, MouseListener, KeyLi
         }
     }
 
+    //Leert das Textfeld, wenn man draufklickt
     public void mouseClicked(MouseEvent e){
         if(e.getSource() == stadttf )
-        {
             stadttf.setText("");
-
-        }
     }
 
     public void keyPressed(KeyEvent e)
@@ -97,8 +105,8 @@ public class GUI extends JFrame implements  ActionListener, MouseListener, KeyLi
 
     private void updaten()
     {
-        setCursor(3);
-        ws.setCityName(stadttf.getText());
+        setCursor(3); //Ladeanimation
+        ws.setCityName(stadttf.getText()); 
         ws.update();
         stadtLabel.setText(ws.getCityName() + "");
         temperatureLabel.setText(ws.getTemperature() + " °C");
@@ -110,25 +118,28 @@ public class GUI extends JFrame implements  ActionListener, MouseListener, KeyLi
     public void setSunrise(){
         sonnenaufgang = new JLabel(ws.getSunrise());
         add(sonnenaufgang);
+        
+        if(sonnenuntergang != null)
+            remove(sonnenuntergang);
         pack();
+        setSize(290, 170);
     }
 
     public void setSunset(){
         sonnenuntergang = new JLabel(ws.getSunset());
         add(sonnenuntergang);
+        
+        if(sonnenaufgang != null)
+            remove(sonnenaufgang);
         pack();
-        setSize(290, 200);
+        setSize(290, 170);
     }
 
+    //Methoden die durch Interfaces implementiert werden müssen, aber nicht benutzt werden
     public void mouseExited(MouseEvent e){}     
-
     public void mouseEntered(MouseEvent e){}    
-
     public void mouseReleased(MouseEvent e){}   
-
     public void mousePressed(MouseEvent e){}   
-
     public void keyReleased(KeyEvent e){}
-
     public void keyTyped(KeyEvent e){}
 }
