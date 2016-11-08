@@ -8,7 +8,6 @@ public class GUI extends JFrame implements  ActionListener, MouseListener, KeyLi
     
     JButton updateButton;
     JButton exitButton;
-    JButton stadtSendenButton;
     
     JLabel temperatureLabel;
     JLabel humidityLabel;
